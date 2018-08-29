@@ -40,7 +40,11 @@ class KipoKPG
 
     public $request_url = 'https://kpg.kipopay.com:8091/V1.0/processors/json/';
 
-    public function __construct()
+    /**
+     * KipoKPG constructor.
+     * @param array $config
+     */
+    public function __construct($config)
     {
         /**
          * Start session if doesn't start
@@ -48,7 +52,11 @@ class KipoKPG
         if(!session_id())
             session_start();
 
-        return parent::__construct();
+        /**
+         * Check merchant_key
+         */
+        if(isset($config['merchant_key']) AND !empty($config['merchant_key']))
+            $this->merchant_key = $config['merchant_key'];
     }
 
 
