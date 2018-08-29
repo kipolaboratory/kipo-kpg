@@ -1,12 +1,12 @@
 <?php
 
-namespace kipolaboratory\KipoKpg;
+namespace kipolaboratory\KipoPay;
 
 /**
  * Class KipoPay
  * @package kipolaboratory\KipoKpg
  */
-class KipoPay extends Component
+class KipoKPG
 {
     public $merchant_key = '';
 
