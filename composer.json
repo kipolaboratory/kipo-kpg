@@ -1,0 +1,20 @@
+{
+    "name": "kipolaboratory/kipo-kpg",
+    "description": "Kipopay payment gateway library OOP (PHP)",
+    "type": "php-library",
+    "keywords": ["php","payment","gateway","OOP"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kipopay",
+            "email": "kipodeveloper@gmail.com"
+        }
+    ],
+    "require": {
+    },
+    "autoload": {
+        "psr-4": {
+            "kipolaboratory\\KipoKpg\\": ""
+        }
+    }
+}
