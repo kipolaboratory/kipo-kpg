@@ -1,6 +1,6 @@
 # PHP Kipo KPG Library: make payment easy with kipo
 
-[![Latest Stable Version](https://poser.pugx.org/kipolaboratory/kipo-kpg/v/stable)](https://packagist.org/packages/infinitydesign/yii2-jalali-datepicker)
+[![Latest Stable Version](https://poser.pugx.org/kipolaboratory/kipo-kpg/v/stable)](https://packagist.org/packages/kipolaboratory/kipo-kpg)
 [![](https://img.shields.io/github/license/kipolaboratory/kipo-kpg.svg)](https://github.com/kipolaboratory/kipo-kpg/blob/master/LICENSE)
 [![](https://img.shields.io/travis/kipolaboratory/kipo-kpg.svg)](https://travis-ci.org/kipolaboratory/kipo-kpg/)
 [![](https://img.shields.io/packagist/dt/kipolaboratory/kipo-kpg.svg)](https://github.com/kipolaboratory/kipo-kpg/releases/)
