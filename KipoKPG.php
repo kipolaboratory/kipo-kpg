@@ -60,7 +60,7 @@ class KipoKPG
      *
      * @var array
      */
-    public $error_message = [
+    const ERROR_MESSAGE = [
         -1 => 'خطایی در داده‌های ارسالی وجود دارد،‌ لطفا اطلاعات را بررسی کنید و دوباره ارسال نمایید. (درخواست پرداخت)',
         -2 => 'امکان برقراری ارتباط با سرور کیپو میسر نمی‌باشد.',
         -3 => 'امکان برقراری ارتباط با سرور کیپو میسر نمی‌باشد.',
@@ -280,8 +280,14 @@ class KipoKPG
         return $this->_referent_code;
     }
 
-    public function getErrorMessage()
+    /**
+     * Retrieve error message
+     *
+     * @param $error_code
+     * @return mixed|null
+     */
+    public function getErrorMessage($error_code)
     {
-
+        return (isset(self::ERROR_MESSAGE[$error_code])) ? self::ERROR_MESSAGE[$error_code] : null;
     }
 }
