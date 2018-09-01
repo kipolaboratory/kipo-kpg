@@ -283,8 +283,7 @@ class KipoKPG
     {
         $return_error = null;
         if (is_numeric($error_code)) {
-            if (isset(self::ERROR_MESSAGE[$error_code]))
-                $return_error = self::ERROR_MESSAGE[$error_code];
+            $return_error = self::ERROR_MESSAGE[$error_code];
         }
 
         return $return_error;
