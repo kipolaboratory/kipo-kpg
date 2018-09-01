@@ -288,6 +288,11 @@ class KipoKPG
      */
     public function getErrorMessage($error_code)
     {
-        return (isset(self::ERROR_MESSAGE[$error_code])) ? self::ERROR_MESSAGE[$error_code] : null;
+        if (isset(self::ERROR_MESSAGE[$error_code]))
+            $return_error = self::ERROR_MESSAGE[$error_code];
+        else
+            $return_error = null;
+
+        return $return_error;
     }
 }
