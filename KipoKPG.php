@@ -73,7 +73,8 @@ class KipoKPG
      *
      * @var string
      */
-    public $request_url = 'https://kpg.kipopay.com:8091/V1.0/processors/json/';
+    public $request_url = 'https://backend.kipopay.com/V1.0/processors/json/';
+    public $request_url_test = 'https://kpg.kipopay.com:8091/V1.0/processors/json/';
 
     public $kipo_webgate_url = 'http://webgate.kipopay.com/';
 
@@ -141,11 +142,7 @@ class KipoKPG
         /**
          * Check if there is error
          */
-        if ($curl->error) {
-            $error_message = $curl->error;
-        }
-
-        if (empty($error_message)) {
+        if (!$curl->error) {
             $response = $curl->response;
 
             /**
@@ -216,11 +213,7 @@ class KipoKPG
         /**
          * Check if there is error
          */
-        if ($curl->error) {
-            $error_message = $curl->error;
-        }
-
-        if (empty($error_message)) {
+        if (!$curl->error) {
             $response = $curl->response;
 
             /**
