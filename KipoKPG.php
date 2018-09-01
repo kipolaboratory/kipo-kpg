@@ -281,10 +281,11 @@ class KipoKPG
      */
     public function getErrorMessage($error_code)
     {
-        if (isset(self::ERROR_MESSAGE[$error_code]))
-            $return_error = self::ERROR_MESSAGE[$error_code];
-        else
-            $return_error = null;
+        $return_error = null;
+        if (is_numeric($error_code)) {
+            if (isset(self::ERROR_MESSAGE[$error_code]))
+                $return_error = self::ERROR_MESSAGE[$error_code];
+        }
 
         return $return_error;
     }
