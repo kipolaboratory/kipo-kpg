@@ -73,8 +73,7 @@ class KipoKPG
      *
      * @var string
      */
-    public $request_url = 'https://backend.kipopay.com/V1.0/processors/json/';
-    public $request_url_test = 'https://kpg.kipopay.com:8091/V1.0/processors/json/';
+    public $request_url = 'https://backend.kipopay.com:8091/V1.0/processors/json/';
 
     public $kipo_webgate_url = 'http://webgate.kipopay.com/';
 
