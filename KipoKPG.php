@@ -23,10 +23,6 @@ class KipoKPG
      */
     private $_headers = [
         'Accept' => 'application/json',
-        'IP' => '127.0.0.1',
-        'OS' => 'web',
-        'SC' => 'false',
-        'SK' => '.',
         'Content-Type' => 'application/json',
     ];
 
@@ -35,25 +31,7 @@ class KipoKPG
      *
      * @var array
      */
-    private $_post_data = [
-        'Command' => [
-            'Sign' => '',
-        ],
-        'OrderAt' => '',
-        'OrderID' => '100000',
-        'Profile' => [
-            'HID' => '+989901001001',
-            'SID' => '00000000-0000-0000-0000-000000000000',
-        ],
-        'Session' => [
-            '' => ''
-        ],
-        'Version' => [
-            'AID' => 'kipo1-alpha',
-        ],
-        'RawData' => [
-        ]
-    ];
+    private $_post_data = [];
 
     /**
      * Contain error code explanation
@@ -68,13 +46,14 @@ class KipoKPG
         -5 => 'پرداخت توسط کاربر لغو شده یا با مشکل مواجه شده است',
     ];
 
+    const API_GENERATE_TOKEN = 'api/v1/token/generate';
+    const API_VERIFY_PAYMENT = 'api/v1/payment/verify';
+
     /**
      * Kipo server application url
      *
      * @var string
      */
-    public $request_url = 'https://backend.kipopay.com:8091/V1.0/processors/json/';
-
     public $kipo_webgate_url = 'http://webgate.kipopay.com/';
 
     /**
@@ -110,22 +89,17 @@ class KipoKPG
         /**
          * Set specific post data for current request
          */
-        $post_data = $this->_post_data;
-        $post_data['Command']['Sign'] = 'KPG@KPG/Initiate';
-        $post_data['OrderAt'] = date("Ymdhis");
-        $post_data['RawData'] = [
-            'MerchantKy' => $this->merchant_key,
-            'Amount' => $amount,
-            'BackwardUrl' => $callback_url
+        $this->_post_data = [
+            'merchant_mobile' => $this->merchant_key,
+            'payment_amount' => $amount,
+            'callback_url' => $callback_url
         ];
 
         $curl->setOpts([
-            CURLOPT_SSL_VERIFYHOST => 0,
-            CURLOPT_SSL_VERIFYPEER => 0,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_URL => $this->request_url,
+            CURLOPT_URL => $this->request_url . self::API_GENERATE_TOKEN,
             CURLOPT_SSL_VERIFYHOST => 0,
-            CURLOPT_USERAGENT => 'kipopay-kpg-agent',
+            CURLOPT_USERAGENT => 'kipo-kpg-agent',
             CURLOPT_CONNECTTIMEOUT => 10,
         ]);
 
@@ -133,7 +107,7 @@ class KipoKPG
             /**
              * Send post request to kipo server
              */
-            $curl->post($this->request_url, json_encode($post_data));
+            $curl->post($this->kipo_webgate_url . self::API_GENERATE_TOKEN, $this->_post_data);
         } catch (\Exception $exception) {
             $error_message = 'CURL request cannot be complete';
         }
@@ -147,18 +121,17 @@ class KipoKPG
             /**
              * Check request is successfully
              */
-            if ($response->Outcome == "0000") {
+            if ($curl->httpStatusCode == 200) {
                 /** @var string $shopping_key */
-                $shopping_key = $response->RawData->ShoppingKy;
-                $this->_shopping_key = $shopping_key;
+                $this->_shopping_key = $response->payment_token;
 
-                return ['status' => true, 'shopping_key' => $shopping_key];
+                return ['status' => true, 'shopping_key' => $this->_shopping_key];
             } else {
                 return ['status' => false, 'message' => -1];
 
             }
         } else {
-            if ($curl->errorCode == 28)
+            if ($curl->errorCode == 422)
                 return ['status' => false, 'message' => -2];
 
             return ['status' => false, 'message' => -3];
@@ -183,20 +156,15 @@ class KipoKPG
         /**
          * Set specific post data for current request
          */
-        $post_data = $this->_post_data;
-        $post_data['Command']['Sign'] = 'KPG@KPG/Inquery';
-        $post_data['OrderAt'] = date("Ymdhis");
-        $post_data['RawData'] = [
-            'ShoppingKy' => $shopping_key,
+        $this->_post_data = [
+            'payment_token' => $shopping_key,
         ];
 
         $curl->setOpts([
-            CURLOPT_SSL_VERIFYHOST => 0,
-            CURLOPT_SSL_VERIFYPEER => 0,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_URL => $this->request_url,
+            CURLOPT_URL => $this->request_url . self::API_VERIFY_PAYMENT,
             CURLOPT_SSL_VERIFYHOST => 0,
-            CURLOPT_USERAGENT => 'kipopay-kpg-agent',
+            CURLOPT_USERAGENT => 'kipo-kpg-agent',
             CURLOPT_CONNECTTIMEOUT => 10,
         ]);
 
@@ -204,7 +172,7 @@ class KipoKPG
             /**
              * Send post request to kipo server
              */
-            $curl->post($this->request_url, json_encode($post_data));
+            $curl->post($this->kipo_webgate_url . self::API_VERIFY_PAYMENT, $this->_post_data);
         } catch (\Exception $exception) {
             $error_message = 'CURL request cannot be complete';
         }
@@ -218,11 +186,20 @@ class KipoKPG
             /**
              * Check request is successfully
              */
-            if ($response->Outcome == "0000") {
-                $this->_referent_code = $response->RawData->ReferingID;
+            if ($curl->httpStatusCode == 200) {
+                $this->_referent_code = $response->referent_code;
 
-                if (!is_null($this->_referent_code))
-                    return ['status' => true, 'referent_code' => $this->_referent_code];
+                /**
+                 * Check if api return referent_code, show
+                 * status true with referent_code and amount
+                 */
+                if (!is_null($this->_referent_code)) {
+                    return [
+                        'status' => true,
+                        'referent_code' => $response->referent_code,
+                        'amount' => $response->amount
+                    ];
+                }
 
                 return ['status' => false, 'message' => -5];
 

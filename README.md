@@ -96,10 +96,6 @@ $curl->getReferentCode();
 
 ### Properties
 ```php
-// URL of Kipo server - https://kpg.kipopay.com:8091/V1.0/processors/json/
-// This server create shopping key and 
-$kipo->request_url;
-
 // URL of Kipo KPG - http://webgate.kipopay.com/
 // Shopping key must post to this url with SK name
 $kipo->kipo_webgate_url;
