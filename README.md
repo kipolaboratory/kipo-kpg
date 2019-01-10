@@ -15,6 +15,7 @@ PHP Kipo KPG Library make it easy to stablish payment with kipo gateway.
 - [Quick Start and Examples](#quick-start-and-examples)
 - [Properties](#properties)
 - [HTML Form to transfer user to KPG](#html-form-to-transfer-user-to-kpg)
+- [Error code and messages](#error-code-message)
 ---
 
 ### Installation
@@ -46,7 +47,7 @@ $kipo = new KipoKPG(['merchant_key' => '09*********']);
  * Replace "YOUR CALLBACK URL" and "AMOUNT" with what you want
  * KPGInitiate return ARRAY for result
  * Successful - ['status' => true, 'shopping_key' => SHOPING_KEY]
- * Failed - ['status' => false, 'message' => ERROR_CODE]
+ * Failed - ['status' => false, 'message' => ERROR_MESAGE, 'code' => ERROR_CODE]
  */
 $kpg_initiate = $kipo->KPGInitiate(AMOUNT, 'YOUR CALLBACK URL');
 
@@ -78,8 +79,8 @@ Verify payment after user return back to *CALLBACK URL*
  * Initiate function
  *
  * KPGInquery return ARRAY for result
- * Successful - ['status' => true, 'referent_code' => REFERENT_CODE]
- * Failed - ['status' => false, 'message' => ERROR_CODE]
+ * Successful - ['status' => true, 'referent_code' => REFERENT_CODE, 'amount' => PAYMENT_AMOUNT]
+ * Failed - ['status' => false, 'message' => ERROR_MESAGE, 'code' => ERROR_CODE]
  */
 $kpg_inquery = $kipo->KPGInquery(SHOPPING_KEY);
 ```
@@ -108,4 +109,15 @@ $kipo->kipo_webgate_url;
 </form>
 <script language="javascript">document.forms['kipopay-gateway'].submit();</script>
 ```
+
+### Error code and messages
+*   -1: There is a problem with request parameters, please check them out (initial payment)
+*   -2: There is a problem with parse requested data (please request again later)
+*   -3: Connection error, API can't connect to KIPO server
+*   -4: There is a problem with request parameters, please check them out (verify payment)
+*   -5: Payment canceled by user or there is a problem
+*   -6: Invalid Merchant key __(Merchant mobile number)__
+*   -7: Minimum payment must be atleast 1.000 Rials
+*   -8: Maximum payment must be 30.000.000 Rials
+*   -9: Invalid payment token __(shoping key)__ format
     

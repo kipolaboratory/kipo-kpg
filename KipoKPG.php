@@ -7,6 +7,9 @@ use Curl\Curl;
 /**
  * Class KipoPay
  * @package kipolaboratory\KipoKpg
+ *
+ * @property string $merchant_key
+ * @property string $kipo_webgate_url
  */
 class KipoKPG
 {
@@ -39,11 +42,15 @@ class KipoKPG
      * @var array
      */
     const ERROR_MESSAGE = [
-        -1 => 'خطایی در داده‌های ارسالی وجود دارد،‌ لطفا اطلاعات را بررسی کنید و دوباره ارسال نمایید. (درخواست پرداخت)',
-        -2 => 'امکان برقراری ارتباط با سرور کیپو میسر نمی‌باشد.',
+        -1 => '.خطایی در داده‌های ارسالی وجود دارد،‌ لطفا اطلاعات را بررسی کنید و دوباره ارسال نمایید. (درخواست پرداخت)',
+        -2 => 'خطایی در تحلیل داده‌های در سرور کیپو بوجود آمده است، دقایقی دیگر امتحان فرمایید.',
         -3 => 'امکان برقراری ارتباط با سرور کیپو میسر نمی‌باشد.',
-        -4 => 'خطایی در داده‌های ارسالی وجود دارد،‌ لطفا اطلاعات را بررسی کنید و دوباره ارسال نمایید. (بررسی تایید پرداخت)',
-        -5 => 'پرداخت توسط کاربر لغو شده یا با مشکل مواجه شده است',
+        -4 => 'خطایی در داده‌های ارسالی وجود دارد،‌ لطفا اطلاعات را بررسی کنید و دوباره ارسال نمایید. (بررسی تایید پرداخت).',
+        -5 => 'پرداخت توسط کاربر لغو شده یا با مشکل مواجه شده است.',
+        -6 => 'شماره تماس فروشنده مورد نظر مورد تایید نمی‌باشد.',
+        -7 => 'حداقل مبلغ پرداخت 1,000 ریال می‌باشد.',
+        -8 => 'حداکثر مبلغ پرداخت 30,0000,000 ریال می‌باشد.',
+        -9 => 'شناسه پرداخت ارسالی مورد تایید نمی‌باشد.'
     ];
 
     const API_GENERATE_TOKEN = 'api/v1/token/generate';
@@ -127,14 +134,28 @@ class KipoKPG
 
                 return ['status' => true, 'shopping_key' => $this->_shopping_key];
             } else {
-                return ['status' => false, 'message' => -1];
-
+                return [
+                    'status' => false,
+                    'code' => -1,
+                    'message' => $this->getErrorMessage(-1),
+                ];
             }
         } else {
-            if ($curl->errorCode == 422)
-                return ['status' => false, 'message' => -2];
+            if ($curl->errorCode == 422) {
+                /** @var array $last_error */
+                $last_error = array_pop($curl->response);
+                return [
+                    'status' => false,
+                    'code' => $last_error->message,
+                    'message' => $this->getErrorMessage($last_error->message)
+                ];
+            }
 
-            return ['status' => false, 'message' => -3];
+            return [
+                'status' => false,
+                'code' => -3,
+                'message' => $this->getErrorMessage(-3),
+            ];
         }
     }
 
@@ -197,18 +218,30 @@ class KipoKPG
                     return [
                         'status' => true,
                         'referent_code' => $response->referent_code,
-                        'amount' => $response->amount
+                        'amount' => $response->payment_amount
                     ];
                 }
 
-                return ['status' => false, 'message' => -5];
+                return [
+                    'status' => false,
+                    'code' => -5,
+                    'message' => $this->getErrorMessage(-5),
+                ];
 
             } else {
-                return ['status' => false, 'message' => -4];
+                return [
+                    'status' => false,
+                    'code' => -4,
+                    'message' => $this->getErrorMessage(-4),
+                ];
 
             }
         } else {
-            return ['status' => false, 'message' => -3];
+            return [
+                'status' => false,
+                'code' => -3,
+                'message' => $this->getErrorMessage(-3),
+            ];
         }
     }
 
