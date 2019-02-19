@@ -104,7 +104,7 @@ class KipoKPG
 
         $curl->setOpts([
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_URL => $this->request_url . self::API_GENERATE_TOKEN,
+            CURLOPT_URL => $this->kipo_webgate_url . self::API_GENERATE_TOKEN,
             CURLOPT_SSL_VERIFYHOST => 0,
             CURLOPT_USERAGENT => 'kipo-kpg-agent',
             CURLOPT_CONNECTTIMEOUT => 10,
@@ -183,7 +183,7 @@ class KipoKPG
 
         $curl->setOpts([
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_URL => $this->request_url . self::API_VERIFY_PAYMENT,
+            CURLOPT_URL => $this->kipo_webgate_url . self::API_VERIFY_PAYMENT,
             CURLOPT_SSL_VERIFYHOST => 0,
             CURLOPT_USERAGENT => 'kipo-kpg-agent',
             CURLOPT_CONNECTTIMEOUT => 10,
