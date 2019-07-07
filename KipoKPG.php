@@ -8,6 +8,7 @@ use Curl\Curl;
  * Class KipoPay
  * @package kipolaboratory\KipoKpg
  *
+ *
  * @property string $merchant_key
  * @property string $kipo_webgate_url
  */
