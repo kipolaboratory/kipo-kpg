@@ -62,7 +62,7 @@ class KipoKPG
      *
      * @var string
      */
-    public $kipo_webgate_url = 'http://webgate.kipopay.com/';
+    public $kipo_webgate_url = 'https://webgate.kipopay.com/';
 
     /**
      * KipoKPG constructor.

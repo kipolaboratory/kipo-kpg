@@ -7,7 +7,7 @@
 
 PHP Kipo KPG Library make it easy to stablish payment with kipo gateway.
 
-![KipoPay Company logo](https://kipopay.com/img/fr.png)
+![KipoPay Company logo](https://kipopay.com/images/kipo-header.svg)
 
 ---
 
@@ -97,7 +97,7 @@ $curl->getReferentCode();
 
 ### Properties
 ```php
-// URL of Kipo KPG - http://webgate.kipopay.com/
+// URL of Kipo KPG - https://webgate.kipopay.com/
 // Shopping key must post to this url with SK name
 $kipo->kipo_webgate_url;
 ```
