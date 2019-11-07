@@ -118,6 +118,6 @@ $kipo->kipo_webgate_url;
 *   -5: Payment canceled by user or there is a problem
 *   -6: Invalid Merchant key __(Merchant mobile number)__
 *   -7: Minimum payment must be atleast 1.000 Rials
-*   -8: Maximum payment must be 30.000.000 Rials
+*   -8: Maximum payment must be 100.000.000 Rials
 *   -9: Invalid payment token __(shoping key)__ format
     

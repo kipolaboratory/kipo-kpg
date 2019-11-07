@@ -5,7 +5,7 @@ namespace kipolaboratory\KipoPay;
 use Curl\Curl;
 
 /**
- * Class KipoPay
+ * Class KipoPay - V 0.5.3
  * @package kipolaboratory\KipoKpg
  *
  *
