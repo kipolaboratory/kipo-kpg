@@ -62,13 +62,14 @@ class KipoKPG
      *
      * @var string
      */
-    public $kipo_webgate_url = 'https://webgate.kipopay.com/';
+//    public $kipo_webgate_url = 'https://webgate.kipopay.com/';
+    public $kipo_webgate_url = 'http://127.0.0.1/kipo-webgate/';
 
     /**
      * KipoKPG constructor.
      * @param array $config
      */
-    public function __construct($config)
+    public function __construct($config = [])
     {
         /**
          * Check merchant_key
@@ -124,6 +125,7 @@ class KipoKPG
          * Check if there is error
          */
         if (!$curl->error) {
+            /** @var object $response */
             $response = $curl->response;
 
             /**
@@ -143,7 +145,7 @@ class KipoKPG
             }
         } else {
             if ($curl->errorCode == 422) {
-                /** @var array $last_error */
+                /** @var object $last_error */
                 $last_error = array_pop($curl->response);
                 return [
                     'status' => false,
@@ -203,6 +205,7 @@ class KipoKPG
          * Check if there is error
          */
         if (!$curl->error) {
+            /** @var object $response */
             $response = $curl->response;
 
             /**
@@ -219,7 +222,9 @@ class KipoKPG
                     return [
                         'status' => true,
                         'referent_code' => $response->referent_code,
-                        'amount' => $response->payment_amount
+                        'user_mobile' => $response->user_mobile,
+                        'amount' => $response->payment_amount,
+                        'order_id' => $response->payment_amount,
                     ];
                 }
 
