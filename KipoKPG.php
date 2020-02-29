@@ -62,8 +62,7 @@ class KipoKPG
      *
      * @var string
      */
-//    public $kipo_webgate_url = 'https://webgate.kipopay.com/';
-    public $kipo_webgate_url = 'http://127.0.0.1/kipo-webgate/';
+    public $kipo_webgate_url = 'https://webgate.kipopay.com/';
 
     /**
      * KipoKPG constructor.
@@ -79,17 +78,19 @@ class KipoKPG
     }
 
     /**
-     * Get two parameter for amount and call back url and send data
+     * Get two parameter for amount, call back url, order id and payload(array) send data
      * to kipo server, retrieve shopping key to start payment, after
      * shopping key received, render form must be called or create form
      * manually
      *
      * @param $amount
      * @param $callback_url
+     * @param $order_id
+     * @param $payload
      * @return array
      * @throws \ErrorException
      */
-    public function KPGInitiate($amount, $callback_url)
+    public function KPGInitiate($amount, $callback_url, $order_id = 1000, $payload = [])
     {
         $curl = new Curl();
 
@@ -101,7 +102,9 @@ class KipoKPG
         $this->_post_data = [
             'merchant_mobile' => $this->merchant_key,
             'payment_amount' => $amount,
-            'callback_url' => $callback_url
+            'callback_url' => $callback_url,
+            'order_id' => $order_id,
+            'payload' => json_encode($payload)
         ];
 
         $curl->setOpts([
@@ -222,9 +225,10 @@ class KipoKPG
                     return [
                         'status' => true,
                         'referent_code' => $response->referent_code,
-                        'user_mobile' => $response->user_mobile,
+                        'order_id' => $response->order_id,
                         'amount' => $response->payment_amount,
-                        'order_id' => $response->payment_amount,
+                        'user_mobile' => $response->user_mobile,
+                        'payload' => json_decode($response->payload),
                     ];
                 }
 

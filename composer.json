@@ -11,7 +11,8 @@
         }
     ],
     "require": {
-        "php-curl-class/php-curl-class": "*"
+        "php-curl-class/php-curl-class": "*",
+        "ext-json": "*"
     },
     "autoload": {
         "psr-4": {
