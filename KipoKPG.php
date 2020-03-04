@@ -221,6 +221,7 @@ class KipoKPG
                 /**
                  * Check if api return referent_code, show
                  * status true with referent_code and amount
+                 * user_info contain first_name and last_name
                  */
                 if (!is_null($this->_referent_code)) {
                     return [
