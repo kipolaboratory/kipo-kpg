@@ -62,7 +62,8 @@ class KipoKPG
      *
      * @var string
      */
-    public $kipo_webgate_url = 'https://webgate.kipopay.com/';
+    public $kipo_webgate_url = 'http://localhost/kipo-webgate/';
+//    public $kipo_webgate_url = 'https://webgate.kipopay.com/';
 
     /**
      * KipoKPG constructor.
@@ -228,6 +229,7 @@ class KipoKPG
                         'order_id' => $response->order_id,
                         'amount' => $response->payment_amount,
                         'user_mobile' => $response->user_mobile,
+                        'user_info' => $response->user_info,
                         'payload' => json_decode($response->payload),
                     ];
                 }
